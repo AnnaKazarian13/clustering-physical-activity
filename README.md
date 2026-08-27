@@ -3,7 +3,8 @@
 | Ноутбук | Задача |
 |---|---|
 | `clustering_physical_activity_100.ipynb` | [Clustering Physical Activity](https://www.kaggle.com/competitions/clustering-physical-activity), score **1.00000** |
-| `mashtoc_letters.ipynb` | [Mashtots Dataset](https://www.kaggle.com/c/mashtots-dataset) — классификация армянских рукописных букв, CNN на 78 классов |
+| `mashtoc_letters.ipynb` | [Mashtots Dataset](https://www.kaggle.com/c/mashtots-dataset) — классификация армянских рукописных букв, CNN на 78 классов (локальный прогон + разбор ошибок) |
+| `mashtots_kaggle.ipynb` | то же, но готовое к запуску **прямо в Kaggle**: пути `/kaggle/input`, GPU, TTA, `submission.csv` |
 
 # Clustering Physical Activity
 
@@ -96,6 +97,42 @@ jupyter notebook mashtoc_letters.ipynb
 | `MASHTOTS_DIAGNOSTIC` | `1` | `0` — пропустить раздел «Диагностика» |
 
 Ноутбук сохранит `mashtots_cnn.keras` и, если найден тест соревнования, `submission.csv`.
+
+## Запуск в Kaggle
+
+`mashtots_kaggle.ipynb` — самодостаточный вариант для Kaggle: ничего не
+устанавливает (всё есть в образе), интернет не нужен, каталог с классами и
+тестовая часть ищутся автоматически в `/kaggle/input`. Подходит и к
+`mashtots-dataset`, и к `mashtots-dataset-v2`.
+
+Через интерфейс:
+
+1. [Create → Notebook](https://www.kaggle.com/code), затем `File → Import Notebook` и загрузить `mashtots_kaggle.ipynb`.
+2. `Add Input` → нужное соревнование.
+3. `Settings → Accelerator: GPU T4 x2` (на CPU прогон будет очень долгим).
+4. `Save & Run All (Commit)`; после завершения `submission.csv` появится в Output, оттуда — `Submit`.
+
+Через CLI (нужен `pip install kaggle` и `~/.kaggle/kaggle.json`):
+
+```bash
+# в kernel-metadata.json подставить свой ник Kaggle в поле "id",
+# и при необходимости заменить competition_sources на mashtots-dataset-v2
+kaggle kernels push -p .
+```
+
+Что заложено в ноутбуке:
+
+| | |
+|---|---|
+| инвентаризация `/kaggle/input` | печатает дерево входа и колонки всех CSV — если автопоиск не сработал, сразу видно нужный путь |
+| GPU | `mixed_float16` и batch 256 при наличии GPU, иначе float32 и batch 64; последний слой явно `float32`, иначе softmax в половинной точности неустойчив |
+| формат теста | поддержаны и каталог картинок `new_test/`, и таблица `new_test.csv` с развёрнутыми пикселями |
+| id в submission | предсказания раскладываются по `id` из `sample_submission.csv`, а не по порядку файлов; `123` и `123.png` считаются одним id |
+| TTA | усреднение по сдвигам на ±2 пикселя (детерминированно, без отражений — буквы несимметричны) |
+| проверка перед отправкой | сверка числа строк и множества `id` с `sample_submission.csv` |
+
+Флаги в первой ячейке: `REFIT_ON_ALL` (доучиться на 100 % данных для лидерборда),
+`USE_TTA`, `MAX_PER_CLASS` (поставьте `50` для быстрой проверки пайплайна).
 
 ## Стек
 
