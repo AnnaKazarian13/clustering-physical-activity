@@ -5,6 +5,10 @@ data/
 submission*.csv
 submission.csv
 
+# Trained models
+*.keras
+*.h5
+
 # Experiments / local helpers
 find_gt_pipeline.py
 search_gt.py
