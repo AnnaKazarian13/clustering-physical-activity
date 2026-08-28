@@ -1,9 +1,10 @@
 # Data (large) — download separately, see README
 data/
 
-# Generated submissions
+# Generated submissions and trained models
 submission*.csv
-submission.csv
+*.keras
+*.h5
 
 # Experiments / local helpers
 find_gt_pipeline.py
