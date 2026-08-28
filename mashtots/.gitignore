@@ -1,0 +1,24 @@
+# Data (large) — download separately, see README
+data/
+
+# Generated submissions and trained models
+submission*.csv
+*.keras
+*.h5
+
+# Python / Jupyter
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.venv/
+venv/
+.env
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Secrets
+kaggle.json
