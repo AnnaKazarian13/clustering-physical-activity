@@ -6,11 +6,6 @@ submission*.csv
 *.keras
 *.h5
 
-# Experiments / local helpers
-find_gt_pipeline.py
-search_gt.py
-*.log
-
 # Python / Jupyter
 __pycache__/
 .ipynb_checkpoints/
@@ -27,5 +22,3 @@ Thumbs.db
 
 # Secrets
 kaggle.json
-access_token
-**/credentials*
