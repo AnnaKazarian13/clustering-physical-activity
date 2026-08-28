@@ -1,0 +1,17 @@
+{
+  "name": "clustering-physical-activity",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "jupyter",
+      "command": ".venv/bin/jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --ServerApp.token='' --ServerApp.password='' --ServerApp.disable_check_xsrf=True",
+      "description": "Jupyter Notebook server for the repo's .ipynb solutions (http://localhost:8888)."
+    }
+  ],
+  "ports": [
+    {
+      "name": "jupyter",
+      "port": 8888
+    }
+  ]
+}
